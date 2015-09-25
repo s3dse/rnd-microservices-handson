@@ -169,7 +169,7 @@ curl -X GET 'http://192.168.99.100:8083/bakery-orders'
 curl -X GET 'http://192.168.99.100:8084/delivery-orders'
 ```
 
-```
+```json
 {
   "_links": {
     "self": {
