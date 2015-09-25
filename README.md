@@ -44,13 +44,19 @@ Start the microservices:
 ./service.sh
 ```
 
-In order to point the ui to the correct backend you might need to change the following lines to point to your docker ip in the docker-compose.yml
+In order to point the ui to the correct backend you might need to change the following lines to point to your docker host ip in the docker-compose.yml
 ```
 - CATALOG_API_BACKEND_HOST=http://192.168.99.100:8081
 - ORDER_API_BACKEND_HOST=http://192.168.99.100:8082
 ```
+## The UI
 
-## Interactin with the system via REST
+You should be able to reach the UI under
+```
+http://<docker-ip>:8085
+```
+
+## Interaction with the system via REST
 
 All the service have an index endpoint that tells you which resources they expose
 
@@ -193,3 +199,20 @@ curl -X GET 'http://192.168.99.100:8084/delivery-orders'
   }
 }
 ```
+
+# Where to go next
+
+If you are interested in the topic and want to go further you can have a look at the following good reads:
+
+## Concepts
+
+- [Sam Newman's "Building Microservices"](http://samnewman.io/books/building_microservices/) is an excellent read on microservices and the challenges and benefits associated with it
+- [Martin Fowler's "Microservices Resource Guide"](http://martinfowler.com/microservices/)
+- ["Richardson Maturity Model - steps toward the glory of REST" by Martin Fowler](http://martinfowler.com/articles/richardsonMaturityModel.html)
+- [Patterns of Enterprise Application Architecture](http://martinfowler.com/books/eaa.html)
+
+## Technology
+
+- [Building Microservices with Spring Boot](http://www.infoq.com/articles/boot-microservices)
+- [https://spring.io/guides/tutorials/bookmarks/](https://spring.io/guides/tutorials/bookmarks/)
+- [RabbitMQ tutorials which nicely illustrates the concepts and features of RabbitMQ](https://www.rabbitmq.com/getstarted.html)
