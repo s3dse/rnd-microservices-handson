@@ -70,7 +70,7 @@ e.g. the order service:
 curl -X GET 'http://192.168.99.100:8082'
 ```
 
-The result is this - it just contains an orders resource:
+The result is this - it just manages an orders resource:
 ```json
 {
   "_links": {
@@ -133,7 +133,8 @@ The location header of the response contains the URI of the order.
 curl -X GET 'http://192.168.99.100:8082/orders/1'
 ```
 
-This will give you something like this - you should see the status change until it reaches DELIVERED
+This will give you something like this - you should see the status change until it reaches DELIVERED.
+
 ```json
 {
   "status": "DELIVERED",
@@ -170,7 +171,7 @@ This will give you something like this - you should see the status change until 
 ```
 
 ### Get the bakery and delivery status
-You can also query the bakery and deliver serive for their status of the order
+You can also query the bakery and deliver service for their status of the order.
 
 ```
 curl -X GET 'http://192.168.99.100:8083/bakery-orders'
