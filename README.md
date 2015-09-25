@@ -49,6 +49,11 @@ In order to point the ui to the correct backend you might need to change the fol
 - CATALOG_API_BACKEND_HOST=http://192.168.99.100:8081
 - ORDER_API_BACKEND_HOST=http://192.168.99.100:8082
 ```
+
+On linux your docker host ip should be localhost. if you run docker machine you can find the ip by running:
+```
+docker-machine env <name-of-docker-vm>
+```
 ## The UI
 
 You should be able to reach the UI under
