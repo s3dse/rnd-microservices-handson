@@ -50,4 +50,146 @@ In order to point the ui to the correct backend you might need to change the fol
 - ORDER_API_BACKEND_HOST=http://192.168.99.100:8082
 ```
 
+## Interactin with the system via REST
 
+All the service have an index endpoint that tells you which resources they expose
+
+e.g. the order service:
+```
+curl -X GET 'http://192.168.99.100:8082'
+```
+
+The result is this - it just contains an orders resource:
+```
+{
+  "_links": {
+    "self": {
+      "href": "http://192.168.99.100:8082/",
+      "templated": false
+    },
+    "orders": {
+      "href": "http://192.168.99.100:8082/orders",
+      "templated": false
+    }
+  }
+}
+```
+
+Catalog service:
+```
+curl -X GET 'http://192.168.99.100:8081'
+```
+
+Bakery service:
+```
+curl -X GET 'http://192.168.99.100:8083'
+```
+
+Delivery service:
+```
+curl -X GET 'http://192.168.99.100:8081'
+```
+
+### Post an order
+```
+curl -X POST -H "Content-Type: application/json" -d '{
+    "orderItems": [{
+            "pizza": "http://192.168.99.100:8081/pizzas/1",
+            "amount": 2
+        },
+        {
+            "pizza": "http://192.168.99.100:8081/pizzas/2",
+            "amount": 1
+        }
+    ],
+    "deliveryAddress": {
+        "firstname": "Mathias",
+        "lastname": "Dpunkt",
+        "street": "Some street 99",
+        "city": "Hamburg",
+        "postalCode": "22222",
+        "telephone": "+4940111111"
+    },
+    
+    "comment": "Slice it!"
+}' 'http://192.168.99.100:8082/orders'
+```
+
+The location header of the response contains the URI of the order.
+
+### Get an order
+```
+curl -X GET 'http://192.168.99.100:8082/orders/1'
+```
+
+This will give you something like this - you should see the status change until it reaches DELIVERED
+```
+{
+  "status": "DELIVERED",
+  "created": "2015-09-25T08:09:53.409",
+  "estimatedTimeOfDelivery": "2015-09-25T08:10:28.933",
+  "totalPrice": "EUR 27.70",
+  "orderItems": [
+    {
+      "pizza": "http://192.168.99.100:8081/pizzas/1",
+      "amount": 2,
+      "price": "EUR 8.90"
+    },
+    {
+      "pizza": "http://192.168.99.100:8081/pizzas/2",
+      "amount": 1,
+      "price": "EUR 9.90"
+    }
+  ],
+  "deliveryAddress": {
+    "firstname": "Mathias",
+    "lastname": "Dpunkt",
+    "street": "Some street 99",
+    "city": "Hamburg",
+    "postalCode": "22222",
+    "telephone": "+4940111111"
+  },
+  "_links": {
+    "self": {
+      "href": "http://192.168.99.100:8082/orders/1",
+      "templated": false
+    }
+  }
+}
+```
+
+### Get the bakery and delivery status
+You can also query the bakery and deliver serive for their status of the order
+
+```
+curl -X GET 'http://192.168.99.100:8083/bakery-orders'
+```
+
+```
+curl -X GET 'http://192.168.99.100:8084/delivery-orders'
+```
+
+```
+{
+  "_links": {
+    "self": {
+      "href": "http://192.168.99.100:8084/delivery-orders",
+      "templated": false
+    }
+  },
+  "_embedded": {
+    "deliveryOrders": [
+      {
+        "orderLink": "http://192.168.99.100:8082/orders/1",
+        "deliveryOrderState": "DONE"
+      }
+    ]
+  },
+  "page": {
+    "size": 20,
+    "totalElements": 1,
+    "totalPages": 1,
+    "number": 0
+  }
+}
+```
