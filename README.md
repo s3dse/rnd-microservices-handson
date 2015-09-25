@@ -60,7 +60,7 @@ curl -X GET 'http://192.168.99.100:8082'
 ```
 
 The result is this - it just contains an orders resource:
-```
+```json
 {
   "_links": {
     "self": {
@@ -123,7 +123,7 @@ curl -X GET 'http://192.168.99.100:8082/orders/1'
 ```
 
 This will give you something like this - you should see the status change until it reaches DELIVERED
-```
+```json
 {
   "status": "DELIVERED",
   "created": "2015-09-25T08:09:53.409",
