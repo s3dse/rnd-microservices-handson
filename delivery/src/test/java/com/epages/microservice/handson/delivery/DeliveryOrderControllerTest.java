@@ -4,10 +4,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-import static org.springframework.restdocs.RestDocumentation.document;
-import static org.springframework.restdocs.RestDocumentation.documentationConfiguration;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,6 +12,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +50,6 @@ public class DeliveryOrderControllerTest {
     @Before
     public void setupContext() {
         mockMvc = webAppContextSetup(context)
-                .apply(documentationConfiguration().uris().withPort(80))
                 .build();
 
         ordersUri = entityLinks.linkToCollectionResource(DeliveryOrder.class).expand().getHref();
@@ -75,13 +71,7 @@ public class DeliveryOrderControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$._embedded.deliveryOrders", hasSize(1)))
                 .andExpect(jsonPath("$._embedded.deliveryOrders[0].deliveryOrderState", is(DeliveryOrderState.IN_PROGRESS.name())))
-                .andDo(document("deliveryorders-list", //
-                        responseFields(
-                                fieldWithPath("_links").description("<<links,Links>> to other resources"),
-                                fieldWithPath("_embedded").description("Embedded <<resources-deliveryorder-get,Delivery Orders>>"),
-                                fieldWithPath("page").description("<<paging,Paging>> information")
-                )))
-        ;
+                ;
     }
 
     @Test
@@ -109,12 +99,6 @@ public class DeliveryOrderControllerTest {
                 .andExpect(status().is(HttpStatus.OK.value()))
                 .andExpect(jsonPath("$.orderLink", is(deliveryOrder.getOrderLink().toString())))
                 .andExpect(jsonPath("$.deliveryOrderState", is(deliveryOrder.getDeliveryOrderState().name())))
-                .andDo(document("deliveryorder-get", //
-                        responseFields(
-                                fieldWithPath("orderLink").description("order link"),
-                                fieldWithPath("deliveryOrderState").description("delivery order status: " 
-                                + DeliveryOrderState.QUEUED.toString() + ", " + DeliveryOrderState.IN_PROGRESS.toString() + ", " + DeliveryOrderState.DONE.toString())
-                    )))
         ;
     }
 

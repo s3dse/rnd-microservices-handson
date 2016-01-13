@@ -1,10 +1,10 @@
 package com.epages.microservice.handson.delivery;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
-
 import java.net.URI;
 
-public interface DeliveryOrderRepository extends PagingAndSortingRepository<DeliveryOrder, Long> {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DeliveryOrderRepository extends JpaRepository<DeliveryOrder, Long> {
 
     DeliveryOrder findByOrderLink(URI orderLink);
 }
