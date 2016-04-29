@@ -15,9 +15,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Audited
 @Table(name = "DELIVERY_ORDER")
 public class DeliveryOrder implements Serializable {
 
