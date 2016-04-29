@@ -45,6 +45,14 @@ dependencies {
 
     compile("com.epages.microservice.handson:shared:0.+")
     runtime("com.h2database:h2")
+    
+    //envers dependencies
+    compile("org.hibernate:hibernate-core:5.1.0.Final")
+    compile("org.hibernate:hibernate-entitymanager:5.1.0.Final")
+    compile("org.hibernate:hibernate-validator:5.1.0.Final")
+    compile("org.hibernate:hibernate-envers:5.1.0.Final")
+    compile("org.springframework.data:spring-data-envers:1.0.0.RELEASE")
+    //envers dependencies
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.assertj:assertj-core:3.1.0")
