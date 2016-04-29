@@ -4,6 +4,12 @@ import static org.assertj.core.api.BDDAssertions.then;
 
 import java.net.URI;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +22,9 @@ public class DeliveryOrderRepositoryTest {
 
     @Autowired
     private DeliveryOrderRepository deliveryOrderRepository;
+    
+    @PersistenceUnit
+	private EntityManagerFactory entityManagerFactory;
 
     private DeliveryOrder deliveryOrder;
 
@@ -46,6 +55,24 @@ public class DeliveryOrderRepositoryTest {
 
     @Test
     public void should_save_delivery_order_with_history() {
-        // TODO implement me
+    	givenDeliveryOrder(DeliveryOrderState.QUEUED);
+		Long id = whenDeliveryOrderIsSaved();
+		deliveryOrder.setDeliveryOrderState(DeliveryOrderState.IN_PROGRESS);
+		whenDeliveryOrderIsSaved();
+		deliveryOrder.setDeliveryOrderState(DeliveryOrderState.DONE);
+		whenDeliveryOrderIsSaved();
+
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		AuditReader auditReader = AuditReaderFactory.get(entityManager);
+		
+		then(auditReader.getRevisions(DeliveryOrder.class, id).size()).isEqualTo(3);
+		then(auditReader.find(DeliveryOrder.class, id, 1)
+				.getDeliveryOrderState()).isEqualTo(DeliveryOrderState.QUEUED);
+		then(auditReader.find(DeliveryOrder.class, id, 2)
+				.getDeliveryOrderState()).isEqualTo(DeliveryOrderState.IN_PROGRESS);
+		then(auditReader.find(DeliveryOrder.class, id, 3)
+				.getDeliveryOrderState()).isEqualTo(DeliveryOrderState.DONE);
+		
+		entityManager.close();
     }
 }
